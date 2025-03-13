@@ -3,6 +3,7 @@ import requests
 import re
 from dotenv import load_dotenv
 import os
+import csv
 
 load_dotenv()
 
@@ -24,6 +25,7 @@ players = []
 import re
 
 players = []
+#Cria Looping para guardar cada informação
 
 for row in table.find_all('tr')[1:]:  # Ignorar cabeçalho
     cols = row.find_all('td')
@@ -39,12 +41,19 @@ for row in table.find_all('tr')[1:]:  # Ignorar cabeçalho
     height = cols[7].get_text(strip=True)
     market_value = cols[-1].get_text(strip=True) 
 
-    print()
     if match:
         name = match.group(1).strip()
         position = match.group(2).strip()
         players.append((name, position, nationality, age, foot, height))
 
-# Exibir resultado
+#Salvar arquivo em documento csv
+csv_file = "Data/players.csv"
+
+with open(csv_file, mode="w", newline="", encoding="utf-8") as file:
+    writer = csv.writer(file)
+    writer.writerows(players)
+
+print(f"Arquivo salvo em: {csv_file}")
+
 for player in players:
    print(player)
